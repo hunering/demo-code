@@ -1,0 +1,18 @@
+{
+  "name": "ml",
+  "version": "0.1.0",
+  "description": "ml",
+  "main": "hello-world-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "node.js",
+    "eclipse",
+    "nodeclipse"
+  ],
+  "author": "",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}

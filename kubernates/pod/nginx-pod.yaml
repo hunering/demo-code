@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: allen-nginx
+  labels:
+    app: nginx-app
+spec:
+  containers:
+    - name: web-server
+      image: nginx
+      ports:
+        - containerPort: 80

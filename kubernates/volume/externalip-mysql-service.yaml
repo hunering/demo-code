@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: externalipmysql-service
+  labels:
+    run: externalipmysql-service
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+  selector:
+    name: mysql 
+  externalIPs: [10.239.151.98]
