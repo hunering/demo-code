@@ -14,5 +14,8 @@
   ],
   "author": "",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+	"dependencies": {
+    "mathjs": "^3.7.0"
+  }
 }

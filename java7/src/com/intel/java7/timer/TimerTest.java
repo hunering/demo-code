@@ -21,6 +21,9 @@ public class TimerTest {
 		timer.cancel();
 	}
 	
+	public boolean acceptsURL(java.lang.String url){
+		return false;
+	}
 	
 	
 	static class WaitHandler extends TimerTask {
