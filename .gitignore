@@ -1,1 +1,6 @@
 /nodejs/node_modules
+*.class
+
+/angular2/getting-start/node_modules
+
+/angular2/getting-start/typings
