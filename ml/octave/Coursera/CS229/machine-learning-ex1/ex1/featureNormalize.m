@@ -26,6 +26,22 @@ sigma = zeros(1, size(X, 2));
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
 
+for i=1:size(X, 2),
+  column = X(:,i);
+  columnSum = sum(column);
+  mu(i) = columnSum/size(X, 1);
+  
+  %maxValue = max(column);
+  %minValue = min(column);
+  %sigma(i) = maxValue - minValue;
+  sigma(i) = std(column);
+  X_norm(:,i) = (column - mu(i))/sigma(i);
+end
+
+%disp(X_norm);
+
+
+
 
 
 

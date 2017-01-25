@@ -17,13 +17,17 @@ for iter = 1:num_iters
     %       of the cost function (computeCostMulti) and gradient here.
     %
 
+    
 
 
-
-
-
-
-
+    h_theta = X * theta;
+    delta = h_theta - y;
+    
+    delta_sum = transpose(delta) * X;
+    
+    step = alpha * delta_sum / m;
+    
+    theta = theta - transpose(step);
 
 
 
