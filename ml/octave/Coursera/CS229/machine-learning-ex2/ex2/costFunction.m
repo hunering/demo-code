@@ -27,10 +27,14 @@ costP2 = transpose(1-y)*log(1-H);
 
 J = (costP1-costP2)/m;
 
+delta = H - y;
+deltaSum = transpose(delta) * X;
+deltaSum = transpose(deltaSum);
+grad = deltaSum / m;
 
-grad(1) = transpose(H - y)*X(:, 1)/m;
-grad(2) = transpose(H - y)*X(:, 2)/m;
-grad(3) = transpose(H - y)*X(:, 3)/m;
+%grad(1) = transpose(H - y)*X(:, 1)/m;
+%grad(2) = transpose(H - y)*X(:, 2)/m;
+%grad(3) = transpose(H - y)*X(:, 3)/m;
 
 
 
