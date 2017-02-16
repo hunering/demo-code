@@ -63,6 +63,45 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+for i = 1:m
+  a1 = X(i,:);
+  yValue = y(i,:);
+  yi = zeros(num_labels, 1);
+  yi(yValue) = 1;
+  
+  a1 = transpose(a1);
+  a1 = [1;a1];
+  z2 = Theta1 * a1;
+  a2 = sigmoid(z2);
+  
+  a2 = [1;a2];
+  z3 = Theta2 * a2;
+  a3 = sigmoid(z3);
+  
+  JiMatric = (-yi).*log(a3) - (1-yi).*log(1-a3);
+  Ji = sum(JiMatric);
+  
+  J += Ji;
+  
+  delta3 = a3 - yi;
+  delta2 = transpose(Theta2)*delta3 .* (a2 .* (1-a2));
+  delta2 = delta2(2:end);
+  
+  Theta1_grad = Theta1_grad + delta2 * transpose(a1);
+  Theta2_grad = Theta2_grad + delta3 * transpose(a2);
+  
+endfor
+
+J = J/m;
+
+
+Theta1DropBias = Theta1(:, 2:size(Theta1,2));
+regCost4Theta1 = sum(sumsq(Theta1DropBias));
+
+Theta2DropBias = Theta2(:, 2:size(Theta2,2));
+regCost4Theta2 = sum(sumsq(Theta2DropBias));
+
+J = J + lambda*(regCost4Theta1 + regCost4Theta2)/(2*m);
 
 
 
@@ -70,6 +109,8 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
+Theta1_grad = Theta1_grad/m;
+Theta2_grad = Theta2_grad/m;
 
 
 
