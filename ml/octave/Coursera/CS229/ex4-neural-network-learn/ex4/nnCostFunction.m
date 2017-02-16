@@ -112,8 +112,8 @@ J = J + lambda*(regCost4Theta1 + regCost4Theta2)/(2*m);
 Theta1_grad = Theta1_grad/m;
 Theta2_grad = Theta2_grad/m;
 
-
-
+Theta1_grad = [Theta1_grad(:,1), Theta1_grad(:,2:size(Theta1_grad,2)) + lambda*Theta1(:,2:size(Theta1,2))/m];
+Theta2_grad = [Theta2_grad(:,1), Theta2_grad(:,2:size(Theta2_grad,2)) + lambda*Theta2(:,2:size(Theta2,2))/m];
 
 
 
