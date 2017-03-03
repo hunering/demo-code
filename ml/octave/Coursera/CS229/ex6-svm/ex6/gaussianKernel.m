@@ -15,7 +15,11 @@ sim = 0;
 %               sigma
 %
 %
+sub = x1 - x2;
+distance = sum(sub .^2);
+exponent = -distance / (2*sigma*sigma);
 
+sim = exp(exponent);
 
 
 

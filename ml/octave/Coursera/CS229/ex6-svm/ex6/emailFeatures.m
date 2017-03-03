@@ -48,7 +48,12 @@ x = zeros(n, 1);
 %
 %
 
+emailSize = size(word_indices, 1);
 
+for i = 1:emailSize
+  wordIndex = word_indices(i);
+  x(wordIndex) = 1;
+end
 
 
 
