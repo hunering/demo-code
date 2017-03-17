@@ -21,7 +21,12 @@ sigma2 = zeros(n, 1);
 %               should contain variance of the i-th feature.
 %
 
+mu_row = sum(X)/m;
+mu = transpose(mu_row);
 
+%X_sub_mu = bsxfun(@minus,X,mu_row); 
+X_sub_mu = X-mu_row;
+sigma2 = transpose(sum(X_sub_mu .^2)/m);
 
 
 

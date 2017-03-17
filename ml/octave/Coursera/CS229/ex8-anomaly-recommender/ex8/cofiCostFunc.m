@@ -40,8 +40,14 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
+predict = X*transpose(Theta);
+regularized_cost = sum(sum(Theta.^2))+sum(sum(X.^2));
+J = sum(sum(((Y-predict).*R).^2))/2 + regularized_cost*lambda/2;
 
 
+
+X_grad = ((predict - Y).*R)*Theta + lambda*X;
+Theta_grad = transpose(((predict - Y).*R))*X + lambda*Theta;
 
 
 
