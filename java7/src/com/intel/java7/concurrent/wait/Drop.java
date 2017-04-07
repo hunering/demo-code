@@ -13,18 +13,30 @@ public class Drop {
     public String take() {
         // Wait until message is
         // available.
-    	synchronized(this) {
-	        while (empty) {
-	            try {
-	                wait();
-	            } catch (InterruptedException e) {}
-	        }
-	        // Toggle status.
-	        empty = true;
-	        // Notify producer that
-	        // status has changed.
-	        notifyAll();
-	        return message;
+    	try{
+	    	synchronized(this) {
+		        while (empty) {
+		            try {
+		                wait();
+		            } catch (InterruptedException e) {}
+		        }
+		        // Toggle status.
+		        empty = true;
+		        // Notify producer that
+		        // status has changed.
+		        notifyAll();
+		        System.out.println("<------ take: " + message);
+		        //throw new Exception("an exception");
+		        return message;
+	    	}
+    	} catch(Exception e) {
+    		try {
+				Thread.sleep(100000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    		return message;
     	}
     }
 
@@ -40,6 +52,7 @@ public class Drop {
         empty = false;
         // Store message.
         this.message = message;
+        System.out.println("------> put : " + message);
         // Notify consumer that status
         // has changed.
         notifyAll();
