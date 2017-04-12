@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/work/demo-code/java7/lib/postgresql-9.4.1212.jre7.jar"/>
-	<classpathentry kind="lib" path="C:/work/demo-code/java7/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/work/demo-code/java/lib/postgresql-9.4.1212.jre7.jar"/>
+	<classpathentry kind="lib" path="C:/work/demo-code/java/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
