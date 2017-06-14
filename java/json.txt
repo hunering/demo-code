@@ -1,0 +1,1 @@
+{"properties":[{"name":"MGMT_ADDR","value":"192.168.110.4"},{"name":"USER","value":"ZGNtc2Nhbg=="},{"name":"IPMI_KEY","value":"0000000000000000000000000000000000000000"},			{"name":"PASSWORD","value":"UGFzc3dvcmRAMQ=="},{"name":"SSH_PORT","value":"22"},{"name":"HTTPS_PORT","value":"443"}]}
