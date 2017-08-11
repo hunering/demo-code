@@ -1,0 +1,1 @@
+mvn archetype:generate -DgroupId=com.xmo.demo -DartifactId=java -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
