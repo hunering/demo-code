@@ -1,0 +1,2 @@
+#/bin/sh
+kubectl get persistentvolumeclaim -o wide --all-namespaces
