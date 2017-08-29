@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: allen-busybox
+  name: busybox
   labels:
     app: busybox-app
 spec:
