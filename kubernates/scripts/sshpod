@@ -1,2 +1,12 @@
 #/bin/sh
-kubectl exec -it $1 /bin/sh
+#kubectl exec -it $@ bash
+#kubectl exec -it $@ /bin/sh
+output=$(kubectl exec $@ which bash | tail -n1)
+if [[ -z "${output}" ]]
+then
+	echo "no bash found, using sh"
+	kubectl exec -it $@ /bin/sh
+else
+	echo "bash found"
+	kubectl exec -it $@ bash
+fi

@@ -1,2 +1,2 @@
 #/bin/sh
-kubectl logs $1
+kubectl logs $@
