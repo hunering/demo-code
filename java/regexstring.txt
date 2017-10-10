@@ -1,0 +1,7 @@
+<div class="daojishi">
+      <input type="hidden" id="tradeDayStatus" value="1"/>
+      <input type="hidden" id="postedType" value="general"/>
+      <strong >当前交易节开始时间：<span style="color:red;" >09:00</span></strong>   
+      <strong >当前交易节结束时间：<span style="color:red;" >11:30</span></strong>   
+      <strong >当前时间：<span style="color:red;" id="dt">2017-10-10 09:44:45</span></strong>   
+    </div>
