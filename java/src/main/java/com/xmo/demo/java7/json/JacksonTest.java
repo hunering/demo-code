@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;;
 public class JacksonTest {
 
     public static void main(String[] args) throws IOException {
-
+        
         ObjectMapper mapper = new ObjectMapper();
 
         JsonNode rootNode = mapper.createObjectNode();
@@ -38,7 +38,7 @@ public class JacksonTest {
     public static void parseFromString() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode actualObj = mapper.readTree("{\"k1\":\"v1\"}");
-        System.out.println(actualObj.get("k1"));
+        System.out.println(actualObj.get("k1").asText());
     }
 
     public static void json2JavaObject() throws JsonParseException, JsonMappingException, IOException {
@@ -47,6 +47,10 @@ public class JacksonTest {
 
         //JSON from String to Object
         User user = mapper.readValue(jsonInString, User.class);
-        System.out.println(user);
+        
+        String userStr = mapper.writeValueAsString(user);
+        System.out.println(userStr);
     }
+    
+    
 }
