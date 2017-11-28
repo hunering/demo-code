@@ -13,6 +13,8 @@ spec:
       containers:
       - name: busybox
         image: busybox
+        tty: true
+        stdin: true
         args:
         - sleep
         - "1000000"
