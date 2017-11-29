@@ -1,0 +1,2 @@
+//used to gen the pom
+mvn archetype:generate -DgroupId=com.xmo.k8s.api -DartifactId=java-api -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
