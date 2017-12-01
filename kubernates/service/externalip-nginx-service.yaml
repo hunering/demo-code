@@ -9,5 +9,5 @@ spec:
   - port: 80
     protocol: TCP
   selector:
-    app: deployment-nginx
-  externalIPs: [10.239.151.98, 10.239.151.93]
+    app: nginx-app
+  externalIPs: [192.168.1.134,192.168.1.132]
