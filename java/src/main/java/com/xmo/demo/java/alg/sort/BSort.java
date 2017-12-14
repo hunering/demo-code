@@ -1,4 +1,4 @@
-package com.xmo.demo.java.alg;
+package com.xmo.demo.java.alg.sort;
 
 public class BSort {
 

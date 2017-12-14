@@ -12,6 +12,8 @@ public class P44WildcardMatch {
 
     }
 
+    // pls ref to 
+    // https://www.tianmaying.com/tutorial/LC44
     public boolean isMatch(String s, String p) {
         boolean[][] f = new boolean[s.length() + 1][p.length() + 1];
         f[0][0] = true;
