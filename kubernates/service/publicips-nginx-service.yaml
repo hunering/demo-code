@@ -9,6 +9,6 @@ spec:
   - port: 80
     protocol: TCP
   selector:
-    app: nginx-app
+    app: nginx
   publicIPs:
   - 192.168.1.133

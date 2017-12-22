@@ -9,5 +9,5 @@ spec:
   - port: 80
     protocol: TCP
   selector:
-    app: nginx-app
+    app: nginx
   externalIPs: [192.168.1.134,192.168.1.132]

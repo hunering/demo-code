@@ -1,14 +1,19 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: busybox-deployment
+  name: busybox-dpy
+  labels:
+    app: busybox
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: busybox
   template:
     metadata:
       labels:
-        app: deployment-busybox
-      name: busybox-deploy-pod 
+        app: busybox
+      name: busybox-dpy 
     spec:
       containers:
       - name: busybox
