@@ -55,3 +55,70 @@ def f3(a, L=None):
         L = []
     L.append(a)
     return L
+
+# keywork argument
+def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+    print("-- This parrot wouldn't", action, end=' ')
+    print("if you put", voltage, "volts through it.")
+    print("-- Lovely plumage, the", type)
+    print("-- It's", state, "!")
+
+parrot(1000)                                          # 1 positional argument
+parrot(voltage=1000)                                  # 1 keyword argument
+parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+
+# the following are invalide
+# parrot()                     # required argument missing
+# parrot(voltage=5.0, 'dead')  # non-keyword argument after a keyword argument
+# parrot(110, voltage=220)     # duplicate value for the same argument
+# parrot(actor='John Cleese')  # unknown keyword argument
+
+
+
+# Arbitrary Argument Lists
+def concat(prefix, *args, sep="/"):
+    return prefix + sep.join(args)
+
+print(concat("Prifix:", "earth", "mars", "venus"))
+print(concat("Prifix:", "earth", "mars", "venus", sep="-"))
+
+# Unpacking Argument Lists
+args = [3, 6]
+print(list(range(*args)))
+
+d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
+parrot(**d)
+
+
+# Lambda
+def make_incrementor(n):
+    return lambda x: x + n
+
+f = make_incrementor(42)
+print(f(0)) #42
+print(f(1)) #43
+
+pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
+pairs.sort(key=lambda pair: pair[1])
+print(pairs) #[(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
+
+# Document String
+def my_function():
+    """
+    Do nothing, but document it.
+
+    No, really, it doesn't do anything.
+    """
+    pass
+print(my_function.__doc__)
+
+
+# annotation
+def foobar(a: int, b: "it's b", c: str = 5) -> tuple:
+    return a, b, c
+print(foobar(1, "b", 6))
+print(foobar(1, "b"))
+print(foobar.__annotations__)

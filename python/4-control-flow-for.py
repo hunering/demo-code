@@ -10,3 +10,7 @@ for word in words:
 for word in words[:]:
     if len(word) > 6:
         words.insert(0, "asfdsafd")
+
+
+for i, v in enumerate(['tic', 'tac', 'toe']):
+    print(i, v)
