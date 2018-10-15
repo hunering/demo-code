@@ -1,0 +1,78 @@
+# output format
+import reprlib
+print(reprlib.repr(set('supercalifragilisticexpialidocious')))
+
+import pprint
+t = [[[['black', 'cyan'], 'white', ['green', 'red']], [['magenta',
+    'yellow'], 'blue']]]
+
+pprint.pprint(t, width=30)
+
+import textwrap
+doc = """The wrap() method is just like fill() except that it returns
+a list of strings instead of one big string with newlines to separate
+the wrapped lines."""
+
+print(textwrap.fill(doc, width=40))
+
+
+# template
+from string import Template
+t = Template('${village}folk send $$10 to $cause.')
+print(t.substitute(village='Nottingham', cause='the ditch fund'))
+
+t = Template('Return the $item to $owner.')
+d = dict(item='unladen swallow')
+print(t.safe_substitute(d))
+
+class BatchRename(Template):
+    delimiter = '%'
+
+t  = BatchRename("%{village}folk send %%10 to %cause.")
+print(t.substitute(village='Nottingham', cause='the ditch fund'))
+
+# Working with Binary Data Record Layouts
+# Pack codes "H" and "I" represent two and four byte 
+# unsigned numbers respectively. 
+# The "<" indicates that they are standard size 
+# and in little-endian byte order
+import struct
+
+with open('myfile.zip', 'rb') as f:
+    data = f.read()
+
+start = 0
+for i in range(3):                      # show the first 3 file headers
+    start += 14
+    fields = struct.unpack('<IIIHH', data[start:start+16])
+    crc32, comp_size, uncomp_size, filenamesize, extra_size = fields
+
+    start += 16
+    filename = data[start:start+filenamesize]
+    start += filenamesize
+    extra = data[start:start+extra_size]
+    print(filename, hex(crc32), comp_size, uncomp_size)
+
+    start += extra_size + comp_size     # skip to the next header
+
+# threading
+import threading, zipfile
+
+class AsyncZip(threading.Thread):
+    def __init__(self, infile, outfile):
+        threading.Thread.__init__(self)
+        self.infile = infile
+        self.outfile = outfile
+
+    def run(self):
+        f = zipfile.ZipFile(self.outfile, 'w', zipfile.ZIP_DEFLATED)
+        f.write(self.infile)
+        f.close()
+        print('Finished background zip of:', self.infile)
+
+background = AsyncZip('mydata.txt', 'myarchive.zip')
+background.start()
+print('The main program continues to run in foreground.')
+
+background.join()    # Wait for the background task to finish
+print('Main program waited until background was done.')
