@@ -18,14 +18,24 @@ class Mapping:
 class MappingSubclass(Mapping):
 
     def update(self, keys, values):
-        # provides new signature for update()
+        # provides new signature for update(), will overwrite the parent's funtion
         # but does not break __init__()
+        super().update((keys, values))
         for item in zip(keys, values):
             self.items_list.append(item)
 
 mapping = Mapping([])
 print(mapping.__dict__)
 print(dir(mapping))
+mapping.update(range(10))
+
+subclass = MappingSubclass([])
+print(mapping.__dict__)
+print(dir(mapping))
+subclass.update("key", "value")
+
+# subclass.update(range(10))
+
 # the following will throw exception,
 # because __update is replaced with _Mapping__update
-mapping.__update
+# mapping.__update

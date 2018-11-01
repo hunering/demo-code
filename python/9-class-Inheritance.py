@@ -10,8 +10,8 @@ class Dog(Animal):
     print("This is dog")
 
 dog = Dog()
-dog.show()
-Animal.show(dog)
+dog.show() # This is dog
+Animal.show(dog) # This is animal
 
 dog.call_show() # will show "This is dog"
 

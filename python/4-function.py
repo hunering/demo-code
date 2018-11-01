@@ -78,7 +78,7 @@ parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
 
 
 
-# Arbitrary Argument Lists
+# Arbitrary Argument Lists, using packing
 def concat(prefix, *args, sep="/"):
     return prefix + sep.join(args)
 
@@ -89,6 +89,7 @@ print(concat("Prifix:", "earth", "mars", "venus", sep="-"))
 args = [3, 6]
 print(list(range(*args)))
 
+# dictionary using ** to unpacking
 d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
 parrot(**d)
 

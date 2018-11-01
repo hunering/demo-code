@@ -3,6 +3,7 @@ import fibonacci as fiblib
 fib2(1000)
 fiblib.fib(1000)
 
+# import the 'parent_package/sub_package/foo.py'
 import parent_package.sub_package.foo
 parent_package.sub_package.foo.sudo_func()
 

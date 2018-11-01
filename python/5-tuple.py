@@ -18,7 +18,11 @@ print(single_item)
 t = 12345, 54321, 'hello!'
 print(t)
 
+t = (12345, 54321, 'hello!')
+print(t)
+
 # unpacking the tuple
 x, y, z = t
 print(x, y, z)
 
+print(*t)

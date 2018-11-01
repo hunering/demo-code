@@ -100,6 +100,8 @@ print(d['primary'])               # fetch the object if it is still alive
 del a                       # remove the one reference
 gc.collect()                # run garbage collection right away
 
+if "primary" in d:
+    print(d['primary'])
 # print(d['primary'])         # entry was automatically removed, will throw exception
 
 # The array module provides an array() object 

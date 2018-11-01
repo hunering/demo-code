@@ -10,6 +10,12 @@ print("repr(s):", repr(s))
 
 print(repr((s, ('spam', 'eggs'))))
 
+# called “formatted string literals,” 
+# f-strings are string literals that have an f at the beginning 
+# and curly braces containing expressions that will be 
+# replaced with their values. The expressions are evaluated 
+# at runtime and then formatted using the __format__ protocol. 
+# As always, the Python docs are your friend when you want to learn more.
 import math
 print(f'The value of pi is approximately {math.pi:.3f}.')
 
