@@ -32,7 +32,7 @@ dict(sape=4139, guido=4127, jack=4098)
 print({x: x**2 for x in (2, 4, 6)})
 
 # Loop
-knights = {'gallahad': 'the pure', 'robin': 'the brave'}
+knights = {'gallahad': 'the pure', 'robin': 'the brave', 4: '4string'}
 
 for item in knights: # go through the keys
     print(item)

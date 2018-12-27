@@ -1,4 +1,4 @@
-# it is good practice to use the with keyword when 
+# it is good practice to use the 'with' keyword when 
 # dealing with file objects. The advantage is that 
 # the file is properly closed after its suite finishes, 
 # even if an exception is raised at some point. 

@@ -108,7 +108,7 @@ if "primary" in d:
 # that is like a list that stores only homogeneous data 
 # and stores it more compactly.
 from array import array
-a = array('H', [4000, 10, 700, 22222])
+a = array('H', [4000, 10, 700, 22222]) # 'H' is typecode
 print(sum(a))
 print(a[1:3])
 

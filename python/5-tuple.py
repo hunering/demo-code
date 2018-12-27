@@ -8,6 +8,9 @@
 empty = ()
 print(empty)
 
+single_item = ('single') # this will create an string variable
+print(single_item)
+
 single_item = 'single',
 print(single_item)
 
