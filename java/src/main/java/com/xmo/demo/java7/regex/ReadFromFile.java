@@ -23,31 +23,33 @@ public class ReadFromFile {
         String content = reader.readLine();
         while (content != null) {
             sb.append(content);
+            sb.append("\n");
             content = reader.readLine();
         }
 
         System.out.println(sb.toString());
 
         // String delimiters = "<div
-        // class=\"daojishi\">.*当前交易节开始时间.*(\\d{2}:\\d{2}).*(\\d{2}:\\d{2}).*(\\d{4}-\\d+-\\d+
+        // class=\"daojishi\">.*å½“å‰�äº¤æ˜“èŠ‚å¼€å§‹æ—¶é—´.*(\\d{2}:\\d{2}).*(\\d{2}:\\d{2}).*(\\d{4}-\\d+-\\d+
         // \\d{2}:\\d{2}:\\d{2})</span></strong>";
         // String delimiters = "<input type=\"hidden\" id=\"maxQ\"
         // value=\"(\\d+)\">";
         String delimiters = "<a href=\"http://fengshan.shpgx.com/delivery/order/detail.htm\\?"
                 + "id=(\\d+)\".*?>(\\d+)</a>" // id, code
                 + ".*?<td>(\\S+)</td>"// CEGS
-                + ".*?<td>(\\S+)</td>"// 管道天然气
+                + ".*?<td>(\\S+)</td>"// ç®¡é�“å¤©ç„¶æ°”
                 + ".*?<td>(\\S+)</td>"// price
-                + ".*?<td>(\\d+)立方米</td>"// amount
-                + ".*?<td>(\\S+)</td>"// 保证金
-                + ".*?<td>(\\S+)</td>"// 交易服务费
-                + ".*?<td>(\\S+)</td>"// 交收服务费
-                + ".*?<td>(\\S+)</td>"// 货款
-                + ".*?<td>(\\S+)</td>"// 交收次数
-                + ".*?<td>(.*?)</td>";// 成交时间
-        // delimiters = "总条数: (\\d+).*页数: \\[ (\\d+) / (\\d+) \\]";
+                + ".*?<td>(\\d+)ç«‹æ–¹ç±³</td>"// amount
+                + ".*?<td>(\\S+)</td>"// ä¿�è¯�é‡‘
+                + ".*?<td>(\\S+)</td>"// äº¤æ˜“æœ�åŠ¡è´¹
+                + ".*?<td>(\\S+)</td>"// äº¤æ”¶æœ�åŠ¡è´¹
+                + ".*?<td>(\\S+)</td>"// è´§æ¬¾
+                + ".*?<td>(\\S+)</td>"// äº¤æ”¶æ¬¡æ•°
+                + ".*?<td>(.*?)</td>";// æˆ�äº¤æ—¶é—´
+        // delimiters = "æ€»æ�¡æ•°: (\\d+).*é¡µæ•°: \\[ (\\d+) / (\\d+) \\]";
         delimiters = "<input type=\"hidden\" id=\"highUpRange\" value=\"(\\d+\\.*\\d*)\">";
         delimiters = "<input type=\"hidden\" id=\"highUpRange\" value=\"(\\d+\\.*\\d*)\"/>";
+        delimiters = "(?<=updates Supported : ).+(?=\n)";
         String str = sb.toString();
 
         Pattern p = Pattern.compile(delimiters);

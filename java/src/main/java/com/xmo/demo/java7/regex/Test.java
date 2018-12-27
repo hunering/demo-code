@@ -16,15 +16,25 @@ public class Test {
         // Ip = matcher.group();
         // }
 
-        String delimiters = "(?m)<entry key=\"DB_DATABASE_NAME\">(.*?)</entry>";
+        // String delimiters = "(?m)<entry
+        // key=\"DB_DATABASE_NAME\">(.*?)</entry>";
 
-        String str = "<entry key=\"NODE_THERMAL_SAMPLING_FREQUENCY\">30</entry>" +
-                "<entry key=\"DB_DATABASE_NAME\">dcm_2dc683d3_85d7_452b_bf9e_5c261d9fb264</entry>" +
-                "<entry key=\"ZK_WATCHER_RESPONSE_TIME\">30</entry>";
+        // String str = "<entry
+        // key=\"NODE_THERMAL_SAMPLING_FREQUENCY\">30</entry>" +
+        // "<entry
+        // key=\"DB_DATABASE_NAME\">dcm_2dc683d3_85d7_452b_bf9e_5c261d9fb264</entry>"
+        // +
+        // "<entry key=\"ZK_WATCHER_RESPONSE_TIME\">30</entry>";
+
+        String delimiters = "(?<=updates Supported : ).+(?=\n)";
+
+        String str = "S2600WFT updates Supported : SUP_ONLY\n" +
+                "Status: log(s) has been generated in: /var/log/SDPTool/Logfiles/10_54_56_65";
 
         Pattern p = Pattern.compile(delimiters);
         Matcher m = p.matcher(str);
         while (m.find()) {
+            System.out.println(m.group());
             for (int i = 0; i < m.groupCount(); i++) {
                 System.out.println(m.groupCount());
                 System.out.println(m.group(i + 1));

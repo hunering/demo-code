@@ -27,7 +27,7 @@ public class JacksonTest {
         ((ObjectNode) rootNode).put("age", 21);
         ((ObjectNode) rootNode).put("age", 22);
         ((ObjectNode) rootNode).put("verified", false);
-        ((ObjectNode) rootNode).put("marks", marksNode);
+        ((ObjectNode) rootNode).set("marks", marksNode);
 
         ;
         parseFromString();
