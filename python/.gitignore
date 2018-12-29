@@ -1,2 +1,3 @@
 *.pyc
 /myarchive.zip
+/node_modules
