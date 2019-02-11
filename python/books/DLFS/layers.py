@@ -1,5 +1,5 @@
 import numpy as np
-from utils import cross_entropy_error, softmax
+from utils import cross_entropy_error , softmax
 
 class MulLayer:
   def __init__(self):
@@ -62,7 +62,7 @@ class Sigmoid:
     return dx
 
 class Affine:
-  def __init__(self, W, b, name):
+  def __init__(self, W, b, name=None):
     self.W = W
     self.b = b
     self.x = None

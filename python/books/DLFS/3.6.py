@@ -1,7 +1,7 @@
 import numpy as np
 from keras.datasets import mnist
-from PIL import Image
-from utils import sigmoid, identity_function, relu
+
+from utils import sigmoid, identity_function, relu, img_show
 
 def init_network():
   network = {}
@@ -27,9 +27,7 @@ def forward(network, x):
 
   return y
 
-def img_show(img):
-  pil_img = Image.fromarray(np.uint8(img))
-  pil_img.show()
+
 
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()

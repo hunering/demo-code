@@ -1,25 +1,20 @@
 from collections import OrderedDict
 import numpy as np
 from utils import softmax, cross_entropy_error, numerical_gradient
-#from layers import Affine, Relu, SoftmaxWithLoss
-import sys, os
-sys.path.append(os.getcwd()+'\\books\\dlfs-orig\\')
-#from common.functions import *
-from common.gradient import *
-from common.layers import *
+from layers import Affine, Relu, SoftmaxWithLoss
 
 class TwoLayerNet:
   def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
-    self.param = {}
-    self.param['W1'] = weight_init_std*np.random.randn(input_size, hidden_size)
-    self.param['W2'] = weight_init_std*np.random.randn(hidden_size, output_size)
-    self.param['b1'] = np.zeros(hidden_size)
-    self.param['b2'] = np.zeros(output_size)
+    self.params = {}
+    self.params['W1'] = weight_init_std*np.random.randn(input_size, hidden_size)
+    self.params['W2'] = weight_init_std*np.random.randn(hidden_size, output_size)
+    self.params['b1'] = np.zeros(hidden_size)
+    self.params['b2'] = np.zeros(output_size)
 
     self.layers = OrderedDict()
-    self.layers['Affine1'] = Affine(self.param['W1'], self.param['b1'])
+    self.layers['Affine1'] = Affine(self.params['W1'], self.params['b1'])
     self.layers['Relu'] = Relu()
-    self.layers['Affine2'] = Affine(self.param['W2'], self.param['b2'])
+    self.layers['Affine2'] = Affine(self.params['W2'], self.params['b2'])
     
     self.lastLayer = SoftmaxWithLoss()
 
@@ -45,10 +40,10 @@ class TwoLayerNet:
     loss_w = lambda W : self.loss(x, t)
 
     grads = {}
-    grads['W1'] = numerical_gradient(loss_w, self.param['W1'])
-    grads['b1'] = numerical_gradient(loss_w, self.param['b1'])
-    grads['W2'] = numerical_gradient(loss_w, self.param['W2'])
-    grads['b2'] = numerical_gradient(loss_w, self.param['b2'])
+    grads['W1'] = numerical_gradient(loss_w, self.params['W1'])
+    grads['b1'] = numerical_gradient(loss_w, self.params['b1'])
+    grads['W2'] = numerical_gradient(loss_w, self.params['W2'])
+    grads['b2'] = numerical_gradient(loss_w, self.params['b2'])
 
     return grads
 

@@ -1,9 +1,6 @@
-import sys, os
-sys.path.append(os.getcwd()+'\\books\\dlfs-orig\\')
 import numpy as np
-from dataset.mnist import load_mnist
 from two_layer_net import TwoLayerNet
-#from ch05.two_layer_net import TwoLayerNet
+from utils import load_mnist
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
