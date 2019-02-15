@@ -62,11 +62,16 @@ def _numerical_gradient_no_batch(f, x):
     original_val = x[idx]
     x[idx] = original_val + h
     fxh1 = f(x)
+    #print(f"numerical gradient v1:{fxh1}")
 
     x[idx] = original_val - h
     fxh2 = f(x)
+    #print(f"numerical gradient v2:{fxh2}")
 
     grad[idx] = (fxh1 - fxh2) / (2*h)
+    if grad[idx] > 0:
+      pass
+
     x[idx] = original_val
 
   return grad

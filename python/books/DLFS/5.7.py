@@ -11,7 +11,7 @@ net = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 """
 img = x_train[0]*255
 img = img.reshape(28, 28).astype(np.int8)
-img_show(img)
+img_show(img) 
 """
 
 train_loss_list = []
