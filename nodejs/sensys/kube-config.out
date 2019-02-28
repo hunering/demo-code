@@ -1,0 +1,34 @@
+{
+    "kind": "Config",
+    "apiVersion": "v1",
+    "preferences": {},
+    "clusters": [
+        {
+            "name": "ubuntu",
+            "cluster": {
+                "server": "http://192.168.1.133:8080",
+                "insecure-skip-tls-verify": true
+            }
+        }
+    ],
+    "users": [
+        {
+            "name": "ubuntu",
+            "user": {
+                "username": "admin",
+                "password": "3SdEXRXtfm1jSC1v"
+            }
+        }
+    ],
+    "contexts": [
+        {
+            "name": "ubuntu",
+            "context": {
+                "cluster": "ubuntu",
+                "user": "ubuntu",
+                "namespace": "sensys01"
+            }
+        }
+    ],
+    "current-context": "ubuntu"
+}

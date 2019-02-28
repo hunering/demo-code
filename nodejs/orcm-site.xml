@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <version>3</version>
+    <role>RECORD</role>
+    <junction>
+        <type>cluster</type>
+        <name>default_cluster</name>
+    <junction><type>row</type><name>row0</name><junction><type>rack</type><name>rack0</name><junction><type>node</type><name>sensysnode-zonex-0</name><controller><host>sensysnode-zonex-0</host><port>55810</port><aggregator>no</aggregator></controller></junction><junction><type>node</type><name>sensysnode-zonex-1</name><controller><host>sensysnode-zonex-1</host><port>55810</port><aggregator>no</aggregator></controller></junction><controller><host>sensysaggregator-zonex</host><port>55805</port><aggregator>yes</aggregator></controller></junction><junction><type>rack</type><name>rack1</name></junction><junction><type>rack</type><name>rack2</name></junction><junction><type>rack</type><name>rack3</name></junction><junction><type>rack</type><name>rack4</name></junction><junction><type>rack</type><name>rack5</name></junction><junction><type>rack</type><name>rack6</name></junction><junction><type>rack</type><name>rack7</name></junction></junction></junction>
+<scheduler><shost>sensysaggregator-zonex</shost><port>55820</port></scheduler></configuration>
