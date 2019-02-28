@@ -2,11 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from two_layer_net import TwoLayerNet
+from multi_layer_net import MultiLayerNet
 from utils import img_show, load_mnist
 
 net = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+#net = MultiLayerNet(input_size=784, hidden_size_list=[50, 50],
+#                    output_size=10, weight_init_std=0.01, use_batchnorm=True)
 
-(x_train, y_train), (x_test, y_test) = load_mnist(normalize=True, one_hot_label=True)
+(x_train, y_train), (x_test, y_test) = load_mnist(
+    normalize=True, one_hot_label=True)
 
 """
 img = x_train[0]*255
@@ -15,7 +19,7 @@ img_show(img)
 """
 
 train_loss_list = []
-inters_num = 10000
+inters_num = 100000
 train_size = x_train.shape[0]
 batch_size = 100
 learning_rate = 0.1

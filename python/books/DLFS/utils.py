@@ -114,3 +114,34 @@ def load_mnist(normalize=False, one_hot_label=True):
     y_test = to_categorical(y_test, num_classes=10)
   
   return (x_train, y_train), (x_test, y_test)
+
+def get_conv_result_shape(H, W, filter_h, filter_w, stride=1, pad=0):
+    result_h_per_channel = int(1 + (H + 2 * pad - filter_h)/stride)
+    result_w_per_channel = int(1 + (W + 2 * pad - filter_w)/stride)
+    return (result_h_per_channel, result_w_per_channel)
+
+# extract each input data element into a ROW
+def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
+    N, C, H, W = input_data.shape
+    result_h_per_channel, result_w_per_channel = get_conv_result_shape(
+        H, W, filter_h, filter_w, stride, pad)
+
+    total_result_h = N * result_h_per_channel * result_w_per_channel
+    total_result_w = C * filter_h * filter_w
+
+    result = np.empty((total_result_h, total_result_w), float)
+    img = np.pad(input_data, [(0, 0), (0, 0),
+                              (pad, pad), (pad, pad)], 'constant')
+
+    current_row = 0
+    for n in range(N):
+      for h in range(result_h_per_channel):
+        for w in range(result_w_per_channel):
+          start_h = h * stride
+          start_w = w * stride
+          window = img[n, :, start_h:start_h +
+                       filter_h, start_w:start_w+filter_w]
+          result[current_row] = window.reshape((-1))
+          print(result[current_row])
+          current_row += 1
+    return result
