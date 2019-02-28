@@ -1,0 +1,4 @@
+mvn archetype:generate -DgroupId=com.eanhu.spring -DartifactId=spring -DarchetypeGroupId=org.codehaus.mojo.archetypes -DarchetypeArtifactId=pom-root -DinteractiveMode=false
+
+//used to gen the common pom
+mvn archetype:generate -DgroupId=com.eanhu.spring.security -DartifactId=spring-security -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
