@@ -16,6 +16,10 @@ x1 = np.random.rand(10, 3, 7, 7)
 col1 = im2col(x1, 5, 5, stride=1, pad=0)
 print(f'the shape of result is {col1.shape}')
 """
+
+a = (1,)
+b = (2,)
+print(a +b)
 x1=np.array([[
     [
         [1,2,0],

@@ -1,5 +1,5 @@
 import numpy as np
-from utils import cross_entropy_error, softmax, im2col, get_conv_result_shape
+from utils import cross_entropy_error, softmax, im2col, get_conv_result_shape, col2im
 
 
 class MulLayer:
@@ -76,6 +76,13 @@ class Affine:
         self.name = name
 
     def forward(self, x):
+        # when using Affine in convolution network, the input x maybe an tensor.
+        # in format (N, Channel_Num, Height, Width)
+        # in such case, we should reshape the input to (N, -1) format
+        self.original_x_shape = x.shape
+        if x.ndim > 2:
+            x = x.reshape(x.shape[0], -1)
+
         out = np.dot(x, self.W) + self.b
         self.x = x
         return out
@@ -87,6 +94,8 @@ class Affine:
         self.dW = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
 
+        # in case the input is tensor
+        dx = dx.reshape(*self.original_x_shape)
         return dx
 
 
@@ -238,11 +247,32 @@ class Pooling:
     
     def forward(self, x):
         N, C, H, W = x.shape
+        self.img_shape = x.shape
         im_col = im2col(x, self.pool_h, self.pool_w, self.stride, self.padding)
         im_col = im_col.reshape(-1, self.pool_h*self.pool_w)
+        self.argmax = im_col.argmax(axis=1)
         out = im_col.max(axis=1)
 
         out_h, out_w = get_conv_result_shape(
             H, W, self.pool_h, self.pool_w, self.stride, self.padding)
         out = out.reshape(N,out_h, out_w, -1).transpose(0, 3, 1, 2)
+        self.out_shape = out.shape
         return out
+    
+    def backward(self, dout):
+        # even the dout is from Affine layer, we already reshape it to
+        # the original shape, so here is dout shape is(N,C,H,W)
+
+        # we transpose the dout, to fit im_col
+        dout = dout.transpose(0, 2, 3, 1)
+        col = np.zeros((dout.size, self.pool_h*self.pool_w))
+        col[np.arange(dout.size), self.argmax] = dout.flatten()
+        col = col.reshape(-1, self.pool_h*self.pool_w*self.out_shape[1])
+        #print(f"my col:{col}")
+        im = col2im(col, self.img_shape, self.pool_h, self.pool_w, self.stride, self.padding)
+
+        return im
+
+
+
+        

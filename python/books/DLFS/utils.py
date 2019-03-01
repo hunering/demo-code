@@ -142,6 +142,34 @@ def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
           window = img[n, :, start_h:start_h +
                        filter_h, start_w:start_w+filter_w]
           result[current_row] = window.reshape((-1))
-          print(result[current_row])
+          #print(result[current_row])
           current_row += 1
     return result
+
+# convert the im2col result back to image formatin (N, C, H, W)
+def col2im(col, im_shape, filter_h, filter_w, stride=1, pad=0):
+  N, C, H, W = im_shape
+  result_h_per_channel, result_w_per_channel = get_conv_result_shape(
+      H, W, filter_h, filter_w, stride, pad)
+
+  result = np.zeros(im_shape, float)
+  img = np.pad(result, [(0, 0), (0, 0),
+                            (pad, pad), (pad, pad)], 'constant')
+
+  current_row = 0
+  for n in range(N):
+    for h in range(result_h_per_channel):
+      for w in range(result_w_per_channel):
+        start_h = h * stride
+        start_w = w * stride
+        #print(col[current_row].reshape(C, filter_h, filter_w))
+
+        # why the following line is "+=", not "="?
+        # because this function is used in backpropagation, we should add all the derivative
+        # for the same image point
+        img[n, :, start_h:start_h +
+                      filter_h, start_w:start_w+filter_w] += col[current_row].reshape(C, filter_h, filter_w)
+        #window = img[n, :, start_h:start_h+filter_h, start_w:start_w+filter_w]
+        #print(window)
+        current_row += 1
+  return img[:, :, pad:H + pad, pad:W + pad]
