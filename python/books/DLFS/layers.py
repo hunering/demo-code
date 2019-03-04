@@ -215,9 +215,7 @@ class Convolution:
 
         if(self.W.ndim == 3):
             FC, FH, FW = self.W.shape
-            self.W = self.W.reshape(1,FC, FH, FW)
-
-        
+            self.W = self.W.reshape(1, FC, FH, FW)
 
     def forward(self, x):
         FN, FC, FH, FW = self.W.shape
@@ -227,10 +225,13 @@ class Convolution:
             x = x.reshape(1, C, H, W)
 
         N, C, H, W = x.shape
+        self.xshape = x.shape
+        self.x = x
 
         out_h, out_w = get_conv_result_shape(
             H, W, FH, FW, self.stride, self.padding)
         im_col = im2col(x, FH, FW, self.stride, self.padding)
+        self.im_col = im_col
         W_col = self.W.reshape((FN, -1))
 
         out = im_col.dot(W_col.T)+self.b
@@ -238,13 +239,27 @@ class Convolution:
 
         return out
 
+    def backward(self, dout):
+        FN, FC, FH, FW = self.W.shape
+        W_col = self.W.reshape(FN, -1)
+
+        dout = dout.transpose(0, 2, 3, 1).reshape(-1, FN)
+        self.dW = self.im_col.T.dot(dout)
+        self.dW = self.dW.transpose(1, 0).reshape(FN, FC, FH, FW)
+        self.db = dout.sum(axis=0)
+
+        dx = dout.dot(W_col)
+        dx = col2im(dx, self.xshape, FH, FW, self.stride, self.padding)
+        return dx
+
+
 class Pooling:
     def __init__(self, pool_h, pool_w, stride=1, padding=0):
         self.pool_h = pool_h
         self.pool_w = pool_w
         self.stride = stride
         self.padding = padding
-    
+
     def forward(self, x):
         N, C, H, W = x.shape
         self.img_shape = x.shape
@@ -255,10 +270,10 @@ class Pooling:
 
         out_h, out_w = get_conv_result_shape(
             H, W, self.pool_h, self.pool_w, self.stride, self.padding)
-        out = out.reshape(N,out_h, out_w, -1).transpose(0, 3, 1, 2)
+        out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
         self.out_shape = out.shape
         return out
-    
+
     def backward(self, dout):
         # even the dout is from Affine layer, we already reshape it to
         # the original shape, so here is dout shape is(N,C,H,W)
@@ -269,10 +284,7 @@ class Pooling:
         col[np.arange(dout.size), self.argmax] = dout.flatten()
         col = col.reshape(-1, self.pool_h*self.pool_w*self.out_shape[1])
         #print(f"my col:{col}")
-        im = col2im(col, self.img_shape, self.pool_h, self.pool_w, self.stride, self.padding)
+        im = col2im(col, self.img_shape, self.pool_h,
+                    self.pool_w, self.stride, self.padding)
 
         return im
-
-
-
-        
