@@ -6,17 +6,17 @@ from keras import optimizers
 from keras import losses
 from keras import metrics
 
-from utils import init_keras, imdb_vectorize_sequences
+from utils import init_keras, vectorize_sequences
 
 init_keras()
 (train_data, train_labels), (test_data, test_labels) = \
     imdb.load_data(num_words=10000)
 
-x_train = imdb_vectorize_sequences(train_data)
+x_train = vectorize_sequences(train_data)
 x_cv = x_train[:10000]
 x_train = x_train[10000:]
 
-x_test = imdb_vectorize_sequences(test_data)
+x_test = vectorize_sequences(test_data)
 t_train = np.asarray(train_labels).astype(np.float32)
 t_cv = t_train[:10000]
 t_train = t_train[10000:]
