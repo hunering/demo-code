@@ -18,7 +18,7 @@ normalize_data(x_test)
 
 k = 4
 epochs = 500
-mae_histories_4_k_folder = []
+mae_histories_4_k_fold = []
 for i in range(k):
     x_train, x_cv, y_train, y_cv = train_test_split(
     x_train, y_train, test_size=1.0/k)
@@ -31,11 +31,11 @@ for i in range(k):
     model.compile(optimizer=optimizers.RMSprop(lr=0.001), loss=losses.mse, metrics=[metrics.mae])
 
     history = model.fit(x_train, y_train, epochs=epochs, batch_size=1)
-    mae_histories_4_k_folder.append(history.history['mean_absolute_error'])
+    mae_histories_4_k_fold.append(history.history['mean_absolute_error'])
 
-average_mae_history = [np.mean([x[i] for x in mae_histories_4_k_folder]) for i in range(epochs)]
+average_mae_history = [np.mean([x[i] for x in mae_histories_4_k_fold]) for i in range(epochs)]
 average_mae_history = average_mae_history[10:]
 plt.plot(range(1, len(average_mae_history)+1), average_mae_history)
 plt.xlabel('Eponchs')
 plt.ylabel('MAE')
-plt.show()
+plt.show() 

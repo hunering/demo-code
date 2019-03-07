@@ -6,3 +6,4 @@
 /language/myarchive.zip
 /node_modules
 .ipynb_checkpoints/
+*.h5
