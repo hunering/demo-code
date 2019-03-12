@@ -2,8 +2,9 @@ from keras import models
 from keras import layers
 from keras.datasets import mnist
 from keras.utils import to_categorical
+from utils import init_keras
 
-
+init_keras()
 
 network = models.Sequential()
 network.add(layers.Dense(512, activation='relu', input_shape=(28*28,)))

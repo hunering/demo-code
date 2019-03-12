@@ -25,17 +25,21 @@ def build_model():
     model.add(layers.Conv2D(128, (3, 3), activation='relu'))
     model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Conv2D(128, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Flatten())
     model.add(layers.Dropout(0.5))
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(1, activation='sigmoid'))
     return model
 
+"""
+
+"""
 
 base_dir = r"C:\Users\huxiaomi\Downloads\deep-learning\data\kaggle-dogs-vs-cats"
 small_base_dir = os.path.join(base_dir, "small")
 train_dir = os.path.join(small_base_dir, r"train")
-cv_dir = os.path.join(small_base_dir, r"cv")
+cv_dir = os.path.join(small_base_dir, r"validation")
 batch_size = 32
 
 train_datagen = ImageDataGenerator(rescale=1.0 / 255, rotation_range=40, width_shift_range=0.2,
@@ -51,12 +55,12 @@ validation_generator = train_datagen.flow_from_directory(
 model = build_model()
 
 model.compile(optimizer=optimizers.RMSprop(lr=1e-4),
-              loss=losses.binary_crossentropy, metrics=[metrics.binary_accuracy])
+              loss=losses.binary_crossentropy, metrics=['binary_accuracy'])
 history = model.fit_generator(train_generator, epochs=100, steps_per_epoch=100,
                               validation_data=validation_generator, validation_steps=50)
 
 model.save('cats_vs_dogs_small.h5')
-
+'''
 loss = history.history['loss']
 acc = history.history['binary_accuracy']
 val_acc = history.history['val_binary_accuracy']
@@ -75,3 +79,4 @@ plt.title('Losses')
 plt.legend()
 
 plt.show()
+'''
