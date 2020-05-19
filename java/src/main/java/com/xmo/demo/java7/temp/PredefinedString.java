@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class PredefinedString {
 
 	public static void main(String[] args) throws IOException {
+		String[] s = new String[10];
+		
 		Path file1 = Paths.get("c:\\temp\\consoledb\\auto20.txt");
 		Path file2 = Paths.get("c:\\temp\\consoledb\\auto21.txt");
 		Path fileSorted1 = Paths.get("c:\\temp\\consoledb\\auto20-s.txt");

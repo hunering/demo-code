@@ -2,6 +2,7 @@ package com.xmo.demo.java.nested;
 
 public class NestedClass {
 
+	private int i_InOutter = 0;
 	public static void main(String[] args) {
 		StaticNestedClass snc = new StaticNestedClass();
 		
@@ -24,12 +25,16 @@ public class NestedClass {
 	static class StaticNestedClass {
 		public StaticNestedClass(){
 			System.out.println("StaticNestedClass");
+			//System.out.println("StaticNestedClass" + i_InOutter);
 		}
 	}
 	
 	class InnerClass {
+		private int i_InInner = 2;
 		public InnerClass(){
-			System.out.println("InnerClass");
+			System.out.println("InnerClass, i_InOutter:" + i_InOutter + ", i_InInner:" + i_InInner);
+			System.out.println("InnerClass, NestedClass.this.i_InOutter:" + NestedClass.this.i_InOutter 
+					+ ", this.i_InInner:" + this.i_InInner);
 		}
 	}
 }

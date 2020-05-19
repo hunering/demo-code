@@ -17,6 +17,10 @@ public class Examples {
 		};
 		// Lambda Runnable
 		Runnable r2 = () -> System.out.println("Hello world two!");
+		Runnable r3 = () -> {
+			System.out.println("Hello world two!");
+			//System.out.println(this);
+		};
 		// Run em!
 		r1.run();
 		r2.run();

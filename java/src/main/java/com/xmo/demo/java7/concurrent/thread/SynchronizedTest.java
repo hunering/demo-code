@@ -40,6 +40,7 @@ class ThreadRunable implements Runnable {
 		this.static_access = static_access;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
 		System.out.println("in the ThreadRunable");
