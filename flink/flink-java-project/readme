@@ -1,0 +1,13 @@
+1. gen maven project:
+mvn archetype:generate \
+-DarchetypeGroupId=org.apache.flink \
+-DarchetypeArtifactId=flink-quickstart-java \
+-DarchetypeVersion=1.11.2 \
+-DgroupId=org.apache.flink.quickstart \
+-DartifactId=flink-java-project \
+-Dversion=0.1 \
+-Dpackage=org.apache.flink.quickstart \
+-DinteractiveMode=false
+
+2. gen eclipse project:
+mvn eclipse:eclipse -DdownloadSources -DdownloadJavadocs
