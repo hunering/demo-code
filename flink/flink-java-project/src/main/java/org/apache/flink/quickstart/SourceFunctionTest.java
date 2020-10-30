@@ -122,58 +122,22 @@ public class SourceFunctionTest {
 		env.execute("testCheckPointedSourceFunction");
 	}
 
-	public static class ExampleCountSource implements SourceFunction<Long>, CheckpointedFunction {
-		private long count = 0L;
-		private volatile boolean isRunning = true;
-
-		private transient ListState<Long> checkpointedCount;
-
-		public void cancel() {
-			isRunning = false;
-		}
-
-		public void initializeState(FunctionInitializationContext context) throws Exception {
-			this.checkpointedCount = context
-					.getOperatorStateStore()
-					.getListState(new ListStateDescriptor<>("count", Long.class));
-
-			if (context.isRestored()) {
-				for (Long count : this.checkpointedCount.get()) {
-					this.count = count;
-				}
-			}
-		}
-
-		public void snapshotState(FunctionSnapshotContext context) throws Exception {
-			this.checkpointedCount.clear();
-			this.checkpointedCount.add(count);
-		}
-
-		@Override
-		public void run(SourceContext<Long> ctx) throws Exception {
-			while (isRunning && count < Long.MAX_VALUE) {
-				// this synchronized block ensures that state checkpointing,
-				// internal state updates and emission of elements are an atomic operation
-				synchronized (ctx.getCheckpointLock()) {
-					ctx.collect(count);
-					count++;
-				}
-			}
-
-		}
-	}
-
 	public static class CheckPointedCountSourceFunction implements SourceFunction<Long>, CheckpointedFunction {
 		private static final long serialVersionUID = 5830656954002750461L;
 		private volatile boolean isRunning = true;
 		private ListState<Long> offsetState;
 		private long cnt = -1;
 
+		public CheckPointedCountSourceFunction() {
+			System.out.println("inside CheckPointedCountSourceFunction");
+		}
+
 		@Override
-		public void run(SourceContext<Long> ctx) throws Exception {			
+		public void run(SourceContext<Long> ctx) throws Exception {
+			synchronized (ctx.getCheckpointLock()) {
 			while (isRunning && cnt < Long.MAX_VALUE) {
 				Thread.sleep(1000);
-				synchronized (ctx.getCheckpointLock()) {
+
 					cnt += 1;
 					ctx.collect(cnt);
 					// ctx.emitWatermark(new Watermark(cnt));
