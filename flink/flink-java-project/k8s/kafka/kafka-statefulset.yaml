@@ -15,6 +15,9 @@ metadata:
   name: kafka
 spec:
   serviceName: kafka-headless
+  selector:
+    matchLabels:
+      app: kafka
   replicas: 1
   template:
     metadata:
