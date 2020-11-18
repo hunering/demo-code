@@ -1,13 +1,5 @@
 package org.apache.flink.quickstart;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
@@ -21,7 +13,6 @@ import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.ListTypeInfo;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -31,7 +22,6 @@ import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.checkpoint.ListCheckpointed;
 import org.apache.flink.streaming.api.datastream.BroadcastConnectedStream;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -39,13 +29,23 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.KeyedBroadcastProcessFunction;
 import org.apache.flink.util.Collector;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+/**
+ * java doc.
+ */
 public class StateTest {
 
 	public static void main(String[] args) throws Exception {
-		// testListCheckPointed();
-		//testCheckpointedFunction();
+		testListCheckPointed();
+		testCheckpointedFunction();
 		testKeyedBroadcastStream();
-
 	}
 
 	public static void testListCheckPointed() throws Exception {
@@ -53,7 +53,7 @@ public class StateTest {
 		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		env.setParallelism(1);
 		env.getConfig().setAutoWatermarkInterval(1L);
-		IntStream is = IntStream.range(1, 105);// .of(1, 2, 3, 4, 5, 6);
+		IntStream is = IntStream.range(1, 105);
 
 		List<Integer> ss = is.boxed().collect(Collectors.toList());
 		DataStreamSource<Integer> source = env.fromCollection(ss);
@@ -71,12 +71,15 @@ public class StateTest {
 
 	}
 
+	/**
+	 * java doc.
+	 */
 	public static class HighTempCounter extends RichFlatMapFunction<Integer, Tuple2<Integer, Long>>
 			implements ListCheckpointed<Long> {
 
 		// local count variable
 		private long highTempCnt = 0L;
-		private int threshold;
+		private final int threshold;
 
 		public HighTempCounter(int threshold) {
 			this.threshold = threshold;
@@ -115,7 +118,7 @@ public class StateTest {
 		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		env.setParallelism(1);
 		env.getConfig().setAutoWatermarkInterval(1L);
-		IntStream is = IntStream.range(1, 105);// .of(1, 2, 3, 4, 5, 6);
+		IntStream is = IntStream.range(1, 105);
 
 		List<Integer> ss = is.boxed().collect(Collectors.toList());
 		DataStreamSource<Integer> source = env.fromCollection(ss);
@@ -134,6 +137,9 @@ public class StateTest {
 
 	}
 
+	/**
+	 * java doc.
+	 */
 	public static class AddFunction implements ReduceFunction<Integer> {
 
 		@Override
@@ -143,6 +149,9 @@ public class StateTest {
 
 	}
 
+	/**
+	 * java doc.
+	 */
 	public static class MyFunction<T> implements MapFunction<T, T>, CheckpointedFunction {
 
 		private ReducingState<Integer> countPerKey;
@@ -181,6 +190,9 @@ public class StateTest {
 		}
 	}
 
+	/**
+	 * java doc.
+	 */
 	public static class Rule {
 		private String name;
 		private int threshold;
@@ -249,6 +261,9 @@ public class StateTest {
 
 	}
 
+	/**
+	 * java doc.
+	 */
 	public static class MyKeyedBroadcastProcessFunction
 			extends KeyedBroadcastProcessFunction<Integer, Integer, Rule, String> {
 		// we keep a list as we may have many first elements waiting
@@ -292,8 +307,8 @@ public class StateTest {
 					for (Integer i : stored) {
 						result = result + i + " - ";
 					}
-					result = result + value;					
-					out.collect(result) ;
+					result = result + value;
+					out.collect(result);
 					stored.clear();
 				}
 
