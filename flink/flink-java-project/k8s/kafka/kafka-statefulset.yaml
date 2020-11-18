@@ -1,3 +1,4 @@
+#https://github.com/ibm-cloud-architecture/refarch-eda/blob/master/deployments/kafka/prod/kafka-statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -150,14 +151,9 @@ spec:
                 - sh
                 - -c
                 - "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server=localhost:9093"
+      volumes:
+        - emptyDir: { }
+          name: datadir
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
-  volumeClaimTemplates:
-    - metadata:
-        name: datadir
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 10Gi
