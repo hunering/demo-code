@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kafka-client
+  labels:
+    app: kafka-client
+spec:
+  containers:
+    - name: kafka-client
+      image: bitnami/kafka:2.6.0
+      args:
+        - sleep
+        - "1000000"
+      ports:
+        - containerPort: 9092
