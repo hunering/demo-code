@@ -10,5 +10,7 @@ scripts:
 ./kafka-console-producer.sh --broker-list kafka-0.kafka-headless.default.svc.cluster.local:9092 --topic test
 ./kafka-console-consumer.sh --bootstrap-server kafka-0.kafka-headless.default.svc.cluster.local:9092 --topic test --from-beginning
 
+./zookeeper-shell.sh zookeeper-0.zookeeper-headless.default.svc.cluster.local:2181 ls /brokers/ids
+
 3.outside the k8s, like on the laptop, we could connect to zk, and create topics, however, we could not
   produce or consume messages
