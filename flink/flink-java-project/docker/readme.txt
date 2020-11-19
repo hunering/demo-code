@@ -1,0 +1,15 @@
+1. for single kafka node, cd "single-node", run "docker-compose up -d"
+2. for cluster kafka, cd "cluster", run "docker-compose up -d"
+
+
+3. to connect to kafka outside docker：
+./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+./kafka-topics.sh --list --zookeeper localhost:2181
+./kafka-console-producer.sh --broker-list localhost:9093 --topic test
+./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9093 --topic test --from-beginning
+
+./zookeeper-shell.sh localhost:2181 ls /brokers/ids
+
+
+4. ref:
+https://github.com/bitnami/bitnami-docker-kafka
