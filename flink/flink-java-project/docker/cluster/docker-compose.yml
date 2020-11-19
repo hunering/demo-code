@@ -7,7 +7,7 @@ services:
       - '2181:2181'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-  kafka:
+  kafka1:
     image: 'docker.io/bitnami/kafka:2-debian-10'
     ports:
       - '9093:9093'
@@ -19,7 +19,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'kafka_data:/bitnami'
+      - 'cluster_kafka1_data:/bitnami'
     depends_on:
       - zookeeper
   kafka2:
@@ -34,7 +34,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9092,EXTERNAL://localhost:9094
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'kafka2_data:/bitnami'
+      - 'cluster_kafka2_data:/bitnami'
     depends_on:
       - zookeeper
   kafka3:
@@ -49,14 +49,14 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka3:9092,EXTERNAL://localhost:9095
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'kafka3_data:/bitnami'
+      - 'cluster_kafka3_data:/bitnami'
     depends_on:
       - zookeeper
 
 volumes:
-  kafka_data:
+  cluster_kafka1_data:
     driver: local
-  kafka2_data:
+  cluster_kafka2_data:
     driver: local
-  kafka3_data:
+  cluster_kafka3_data:
     driver: local
