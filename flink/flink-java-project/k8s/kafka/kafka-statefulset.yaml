@@ -42,8 +42,8 @@ spec:
           image: bitnami/kafka:2.6.0
           resources:
             requests:
-              memory: "1Gi"
-              cpu: 500m
+              memory: "2Gi"
+              cpu: 2000m
           ports:
             - containerPort: 9092
               name: server
