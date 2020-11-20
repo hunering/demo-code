@@ -1,0 +1,1 @@
+socat tcp4-listen:8086,reuseaddr,fork tcp:192.168.146.167:8086
