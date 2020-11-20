@@ -16,10 +16,10 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka1:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'cluster_kafka1_data:/bitnami'
+      - 'kafka1_data:/bitnami'
     depends_on:
       - zookeeper
   kafka2:
@@ -34,7 +34,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9092,EXTERNAL://localhost:9094
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'cluster_kafka2_data:/bitnami'
+      - 'kafka2_data:/bitnami'
     depends_on:
       - zookeeper
   kafka3:
@@ -49,14 +49,59 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka3:9092,EXTERNAL://localhost:9095
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     volumes:
-      - 'cluster_kafka3_data:/bitnami'
+      - 'kafka3_data:/bitnami'
     depends_on:
       - zookeeper
+  influxdb:
+    image: influxdb:1.8.3
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_ADMIN_USER_PASSWORD=intel_123
+      - INFLUXDB_USER=user
+      - INFLUXDB_USER_PASSWORD=intel_123
+      - INFLUXDB_DB=my_database
+  chronograf:
+    image: chronograf:1.8.8
+    ports:
+      - '8888:8888'
+    volumes:
+      - chronograf_data:/var/lib/chronograf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=user
+      - INFLUXDB_PASSWORD=intel_123
+  grafana:
+    image: grafana/grafana:7.3.3
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=intel_123
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_DOMAIN=myrul.com
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=myadrress@gmail.com
+      - GF_SMTP_PASSWORD=mypassword
+      - GF_SMTP_FROM_ADDRESS=myaddress@gmail.com
+    volumes:
+      - 'grafana_data:/var/lib/grafana'
+      - ../grafana-provisioning/:/etc/grafana/provisioning
 
 volumes:
-  cluster_kafka1_data:
+  kafka1_data:
     driver: local
-  cluster_kafka2_data:
+  kafka2_data:
     driver: local
-  cluster_kafka3_data:
+  kafka3_data:
+    driver: local
+  influxdb_data:
+    driver: local
+  chronograf_data:
+    driver: local
+  grafana_data:
     driver: local
