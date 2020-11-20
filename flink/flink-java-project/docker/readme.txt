@@ -1,6 +1,6 @@
 1. for single kafka node, cd "single-node", run "docker-compose up -d"
 2. for cluster kafka, cd "cluster", run "docker-compose up -d"
-
+    connect to grafana: docker-compose exec grafana sh
 
 3. to connect to kafka outside docker：
 ./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test

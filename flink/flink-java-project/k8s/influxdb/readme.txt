@@ -1,0 +1,1 @@
+https://octoperf.com/blog/2019/09/19/kraken-kubernetes-influxdb-grafana-telegraf/
