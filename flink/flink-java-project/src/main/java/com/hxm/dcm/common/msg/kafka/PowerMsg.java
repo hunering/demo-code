@@ -1,13 +1,17 @@
 package com.hxm.dcm.common.msg.kafka;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class PowerMsg {
 	private String deviceId;
-	private LocalDateTime timeStamp;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+	private ZonedDateTime timeStamp;
 	private float value;
 
-	public PowerMsg(String deviceId, LocalDateTime timeStamp, float value) {
+	public PowerMsg(String deviceId, ZonedDateTime timeStamp, float value) {
 		this.deviceId = deviceId;
 		this.timeStamp = timeStamp;
 		this.value = value;
@@ -21,11 +25,11 @@ public class PowerMsg {
 		this.deviceId = deviceId;
 	}
 
-	public LocalDateTime getTimeStamp() {
+	public ZonedDateTime getTimeStamp() {
 		return timeStamp;
 	}
 
-	public void setTimeStamp(LocalDateTime timeStamp) {
+	public void setTimeStamp(ZonedDateTime timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 

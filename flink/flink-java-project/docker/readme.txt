@@ -10,6 +10,7 @@
 
 ./zookeeper-shell.sh localhost:2181 ls /brokers/ids
 
+./kafka-topics.sh --zookeeper localhost:2181 --delete --topic dcm_power
 
 4. ref:
 https://github.com/bitnami/bitnami-docker-kafka
