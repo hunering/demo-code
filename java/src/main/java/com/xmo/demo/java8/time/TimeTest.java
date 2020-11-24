@@ -1,13 +1,6 @@
 package com.xmo.demo.java8.time;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.Period;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
@@ -123,5 +116,12 @@ public class TimeTest {
 		LocalDate date1 = LocalDate.of(2014, 3, 18);
 		String formattedDate = date1.format(formatter);
 		LocalDate date2 = LocalDate.parse(formattedDate, formatter);
+	}
+
+	static void ZonedTimetest() {
+		ZonedDateTime utcZoned = ZonedDateTime.of(LocalDate.now().atTime(11, 30), ZoneOffset.UTC);
+		ZoneId swissZone = ZoneId.of("Europe/Zurich");
+		ZonedDateTime swissZoned = utcZoned.withZoneSameInstant(swissZone);
+		LocalDateTime swissLocal = swissZoned.toLocalDateTime();
 	}
 }

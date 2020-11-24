@@ -11,6 +11,9 @@ public class PowerMsg {
 	private ZonedDateTime timeStamp;
 	private float value;
 
+	public PowerMsg() {
+	}
+
 	public PowerMsg(String deviceId, ZonedDateTime timeStamp, float value) {
 		this.deviceId = deviceId;
 		this.timeStamp = timeStamp;

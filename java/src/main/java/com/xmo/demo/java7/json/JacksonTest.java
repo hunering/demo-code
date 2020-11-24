@@ -51,6 +51,13 @@ public class JacksonTest {
         String userStr = mapper.writeValueAsString(user);
         System.out.println(userStr);
     }
+    public static void object2json() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = new User();
+        user.setName("user name");
+        user.setAge(100);
+        JsonNode  jsonNode = objectMapper.valueToTree(user);
+    }
     
     
 }
