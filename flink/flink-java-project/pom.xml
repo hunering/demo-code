@@ -35,6 +35,8 @@ under the License.
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<log4j.version>2.12.1</log4j.version>
+		<junit.jupiter.version>5.7.0</junit.jupiter.version>
+		<junit.platform.version>1.7.0</junit.platform.version>
 	</properties>
 
 	<repositories>
@@ -88,6 +90,11 @@ under the License.
 			<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
 			<version>${flink.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.bahir</groupId>
+			<artifactId>flink-connector-influxdb_${scala.binary.version}</artifactId>
+			<version>1.1-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Add logging framework, to produce console output when running in the IDE. -->
 		<!-- These dependencies are excluded from the application JAR by default. -->
@@ -128,6 +135,13 @@ under the License.
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.11.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

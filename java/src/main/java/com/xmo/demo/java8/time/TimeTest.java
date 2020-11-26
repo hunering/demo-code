@@ -124,4 +124,10 @@ public class TimeTest {
 		ZonedDateTime swissZoned = utcZoned.withZoneSameInstant(swissZone);
 		LocalDateTime swissLocal = swissZoned.toLocalDateTime();
 	}
+
+	public static LocalDateTime millsToLocalDateTime(long millis) {
+		Instant instant = Instant.ofEpochMilli(millis);
+		LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+		return date;
+	}
 }

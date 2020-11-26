@@ -20,8 +20,18 @@ import java.util.concurrent.Future;
 
 public class PowerDataGen {
 	public static void main(String[] args) throws ExecutionException, InterruptedException, JsonProcessingException {
+		PowerDataGen gen = new PowerDataGen();
+		Producer<String, String> producer = gen.createKafkaProducer(KafkaProperty.BootstrapServers);
+		String deviceId = "device_id_0";
+		ZoneId shZone = ZoneId.of("+8");
+		ZonedDateTime timeZoned = ZonedDateTime.of(LocalDateTime.now(), shZone);
+		gen.genKafkaPowerData(producer, deviceId, timeZoned, 100);
+		producer.close();
+	}
+
+	public Producer<String, String> createKafkaProducer(String servers) {
 		Properties props = new Properties();
-		props.put("bootstrap.servers", KafkaProperty.BootstrapServers);
+		props.put("bootstrap.servers", servers);
 		props.put("acks", "all");
 		props.put("retries", 0);
 		props.put("batch.size", 16384);
@@ -29,23 +39,16 @@ public class PowerDataGen {
 		props.put("buffer.memory", 33554432);
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		//props.put("value.serializer", "io.confluent.kafka.serializers.json.KafkaJsonSchemaSerializer");
+		return new KafkaProducer<>(props);
+	}
 
+	public void genKafkaPowerData(Producer<String, String> producer, String deviceId, ZonedDateTime timeZoned, int value) throws JsonProcessingException, ExecutionException, InterruptedException {
 		ObjectMapper objectMapper = PowerMsgUtils.createMapper();
-		Producer<String, String> producer = new KafkaProducer<>(props);
-		ZoneId shZone = ZoneId.of("+8");
-		//Producer<String, PowerMsg> producer = new KafkaProducer<>(props);
-		for(int i = 0; i < 100; i++) {
-			String deviceId = "device_id_0";
-			ZonedDateTime timeZoned = ZonedDateTime.of(LocalDateTime.now(), shZone);
-			PowerMsg msg = new PowerMsg(deviceId, timeZoned, 100);
+		for(int i = 0; i < 200; i++) {
+			PowerMsg msg = new PowerMsg(deviceId, timeZoned, value);
 			String strMsg = PowerMsgUtils.Msg2Json(msg, objectMapper);
 			Future<RecordMetadata> data = producer.send(new ProducerRecord<String, String>(KafkaProperty.PowerTopicName, deviceId, strMsg));
 			data.get();
-			//producer.send(new ProducerRecord<String, PowerMsg>("dcm-power", deviceId, msg));
 		}
-
-
-		producer.close();
 	}
 }

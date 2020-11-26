@@ -12,11 +12,9 @@
       }
     ]
   },
-  "editable": false,
+  "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "hideControls": false,
-  "id": null,
   "links": [],
   "panels": [
     {
@@ -24,14 +22,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "InfluxDB",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 24,
         "x": 0,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 2,
       "legend": {
         "avg": false,
@@ -46,7 +52,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "7.3.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -58,15 +68,47 @@
         {
           "expr": "node_cpu{mode=\"user\"}",
           "format": "time_series",
+          "groupBy": [
+            {
+              "params": [
+                "5m"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "0"
+              ],
+              "type": "fill"
+            }
+          ],
           "intervalFactor": 1,
           "legendFormat": "{{ cpu }}",
-          "refId": "A"
+          "measurement": "dcm_power",
+          "orderByTime": "ASC",
+          "policy": "dcm",
+          "query": "SELECT \"value\" FROM \"dcm\".\"autogen\".\"dcm_power\" WHERE time >= now() - 7d",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
-      "title": "cpu",
+      "title": "DCM Power",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -97,17 +139,22 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
-  "schemaVersion": 16,
+  "refresh": false,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -138,5 +185,5 @@
   "timezone": "",
   "title": "influxdb dashboard",
   "uid": "dw2aBiqkz",
-  "version": 1
+  "version": 2
 }

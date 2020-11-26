@@ -1,0 +1,2 @@
+{"deviceId":"device_id_0","timeStamp":"2020-11-26T10:45:02.092+08:00","value":100.0}
+{"deviceId":"device_id_0","timeStamp":"2020-11-26T10:45:02.092+08:00","value":100.0}
