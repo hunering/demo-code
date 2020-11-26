@@ -5,7 +5,7 @@
 3. to connect to kafka outside docker：
 ./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 5 --topic dcm_power
 ./kafka-topics.sh --list --zookeeper localhost:2181
-./kafka-console-producer.sh --broker-list localhost:9093 --topic dcm_power < /home/huxiaomi/work/demo-code/flink/flink-java-project/src/test/java/com/hxm/dcm/flink/power/power_data_0.csv
+./kafka-console-producer.sh --broker-list localhost:9093 --topic dcm_power < /home/huxiaomi/work/demo-code/flink/flink-java-project/src/test/java/com/hxm/dcm/flink/power/power_data_1.txt
 ./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9093 --topic dcm_power --from-beginning
 
 ./zookeeper-shell.sh localhost:2181 ls /brokers/ids

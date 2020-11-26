@@ -10,15 +10,17 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.TimeCharacteristic;
-import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
-import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -27,8 +29,6 @@ import org.apache.flink.streaming.connectors.influxdb.InfluxDBPoint;
 import org.apache.flink.streaming.connectors.influxdb.InfluxDBSink;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -38,26 +38,21 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class PowerMsgCount {
-	private static final String kafkaClientGroupId = "Flink_Power_Msg_Count_Client";
+public class PowerAveragePerDevice {
+	private static final String kafkaClientGroupId = "Flink_Power_Average_Per_Device_Client";
 	private static final long boundedOutOfOrdernessSeconds = 1;
 	private static final long windowLengthSeconds = 5;
 
-	transient Logger LOG = LoggerFactory.getLogger(PowerMsgCount.class);
-
 	public static void main(String[] args) throws Exception {
-		PowerMsgCount powerCount = new PowerMsgCount();
-		StreamExecutionEnvironment env = powerCount.getExecEnv();
-		powerCount.assembleFlow(env, KafkaProperty.BootstrapServers, KafkaProperty.PowerTopicName,
+		PowerAveragePerDevice util = new PowerAveragePerDevice();
+		StreamExecutionEnvironment env = util.getExecEnv();
+		util.assembleFlow(env, KafkaProperty.BootstrapServers, KafkaProperty.PowerTopicName,
 				boundedOutOfOrdernessSeconds, windowLengthSeconds);
 		env.execute("Power Msg Count");
 	}
 
 	private StreamExecutionEnvironment getExecEnv() {
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-		//String cwd = Paths.get("/home/huxiaomi/tools/flink-1.11.2/conf").toAbsolutePath().normalize().toString();
-		//Configuration conf = GlobalConfiguration.loadConfiguration(cwd);
-		//StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
 		env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 		env.getConfig().setAutoWatermarkInterval(500);
 		env.setParallelism(1);
@@ -93,19 +88,25 @@ public class PowerMsgCount {
 							return obj.getTimeStamp().toInstant().toEpochMilli();
 						})).name("watermarked-power-msg");
 
-		AllWindowedStream<PowerMsg, TimeWindow> windowedStream = withTimestampsAndWatermarks.windowAll(TumblingEventTimeWindows.of(Time.seconds(windowLengthSeconds)));
-		SingleOutputStreamOperator<Tuple2<Long, Long>> countStream = windowedStream.aggregate(new PowerMsgCountAcc(), new MsgCountWindowFunction());
+		TypeInformation<Tuple2<Long, Float>> accType = TypeInformation.of(new TypeHint<Tuple2<Long, Float>>(){});
+		TypeInformation<Tuple2<Long, Float>> aggregateResultType = TypeInformation.of(new TypeHint<Tuple2<Long, Float>>(){});
+		// Tuple3.of(EpochMillSeconds, DeviceKey, AveragePowerPerWindow)
+		TypeInformation<Tuple3<Long, String, Float>> resultType = TypeInformation.of(new TypeHint<Tuple3<Long, String, Float>>(){});
+		SingleOutputStreamOperator<Tuple3<Long, String, Float>> aggStream = withTimestampsAndWatermarks
+				.keyBy(PowerMsg::getDeviceId)
+				.window(TumblingEventTimeWindows.of(Time.seconds(windowLengthSeconds)))
+				.aggregate(new PowerValueAcc(), new PowerAverageWindowFunction(), accType, aggregateResultType, resultType);
 
-		DataStream<String> fileStream = countStream.map(new RichMapFunction<Tuple2<Long, Long>, String>() {
+		DataStream<String> fileStream = aggStream.map(new RichMapFunction<Tuple3<Long, String, Float>, String>() {
 			@Override
-			public String map(Tuple2<Long, Long> value) throws Exception {
+			public String map(Tuple3<Long, String, Float> value) throws Exception {
 				Instant instant = Instant.ofEpochMilli(value.f0);
 				LocalDateTime date = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-				return date.toString() + ": " +value.f1;
+				return date.toString() + ": " + value.f1 + ": " + value.f2;
 			}
 		});
 
-		String fileFolder = "file:///home/huxiaomi/work/demo-code/flink/flink-java-project/sink_files/dcm_power/msg_count/";
+		String fileFolder = "file:///home/huxiaomi/work/demo-code/flink/flink-java-project/sink_files/dcm_power/average/";
 		StreamingFileSink<String> fileSink = StreamingFileSink
 				.forRowFormat(new org.apache.flink.core.fs.Path(fileFolder), new SimpleStringEncoder<String>("UTF-8"))
 				.withRollingPolicy(
@@ -118,16 +119,16 @@ public class PowerMsgCount {
 
 		fileStream.addSink(fileSink);
 
-		DataStream<InfluxDBPoint> dataStream = countStream.map(
-				new RichMapFunction<Tuple2<Long, Long>, InfluxDBPoint>() {
+		DataStream<InfluxDBPoint> dataStream = aggStream.map(
+				new RichMapFunction<Tuple3<Long, String, Float>, InfluxDBPoint>() {
 					@Override
-					public InfluxDBPoint map(Tuple2<Long, Long> value) throws Exception {
-						String measurement = InfluxdbProperty.PowerMsgCountMeasureName;
+					public InfluxDBPoint map(Tuple3<Long, String, Float> value) throws Exception {
+						String measurement = InfluxdbProperty.PowerAverageMeasureName + value.f1;
 						long timestamp = value.f0;
 						HashMap<String, String> tags = new HashMap<>();
 						tags.put("tag", "tag");
 						HashMap<String, Object> fields = new HashMap<>();
-						fields.put(InfluxdbProperty.PowerMsgCountValueField, value.f1);
+						fields.put(InfluxdbProperty.PowerMsgCountValueField, value.f2);
 						return new InfluxDBPoint(measurement, timestamp, tags, fields);
 					}
 				}
@@ -145,36 +146,36 @@ public class PowerMsgCount {
 		dataStream.print();
 	}
 
-	private static class MsgCountWindowFunction
-			extends ProcessAllWindowFunction<Long, Tuple2<Long, Long>, TimeWindow> {
+	private static class PowerAverageWindowFunction
+			extends ProcessWindowFunction<Tuple2<Long, Float>, Tuple3<Long, String, Float>, String, TimeWindow> {
 		@Override
-		public void process(Context context, Iterable<Long> elements, Collector<Tuple2<Long, Long>> out) throws Exception {
-			Long msgCount = elements.iterator().next();
-			out.collect(new Tuple2<Long, Long>(context.window().getStart(), msgCount));
+		public void process(String key, Context context, Iterable<Tuple2<Long, Float>> elements, Collector<Tuple3<Long, String, Float>> out) throws Exception {
+			Tuple2<Long, Float> msgCountAndPowerAcc = elements.iterator().next();
+			// Tuple3.of(EpochMillSeconds, DeviceKey, AveragePowerPerWindow)
+			out.collect(Tuple3.of(context.window().getStart(), key, msgCountAndPowerAcc.f1/msgCountAndPowerAcc.f0));
 		}
 	}
 
-	private static class PowerMsgCountAcc
-			implements AggregateFunction<PowerMsg, Long, Long> {
-
+	private static class PowerValueAcc
+			implements AggregateFunction<PowerMsg, Tuple2<Long, Float>, Tuple2<Long, Float>> {
 		@Override
-		public Long createAccumulator() {
-			return 0L;
+		public Tuple2<Long, Float> createAccumulator() {
+			return Tuple2.of(0L, 0f);
 		}
 
 		@Override
-		public Long add(PowerMsg value, Long accumulator) {
-			return accumulator + 1;
+		public Tuple2<Long, Float> add(PowerMsg value, Tuple2<Long, Float> accumulator) {
+			return Tuple2.of(accumulator.f0+1, accumulator.f1 + value.getValue());
 		}
 
 		@Override
-		public Long getResult(Long accumulator) {
+		public Tuple2<Long, Float> getResult(Tuple2<Long, Float> accumulator) {
 			return accumulator;
 		}
 
 		@Override
-		public Long merge(Long a, Long b) {
-			return a + b;
+		public Tuple2<Long, Float> merge(Tuple2<Long, Float> a, Tuple2<Long, Float> b) {
+			return Tuple2.of(a.f0 + b.f0, a.f1 + b.f1);
 		}
 	}
 }
