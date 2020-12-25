@@ -1,4 +1,4 @@
-print("Hello World")
+print("Hello World for Python")
 fn=0
 fn1=1
 while fn < 10:
