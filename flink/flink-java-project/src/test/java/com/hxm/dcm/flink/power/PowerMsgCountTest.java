@@ -20,6 +20,7 @@ class PowerMsgCountTest {
 	void testSavepoint() {
 		// 1. clean the dcm_power topic in kafka
 		// 2. submit the PowerMsgCount job to flink
+		// using the data in resources/power/power_msg_count
 		// 3. produce the power messages to kafka topic in power_data_1.txt
 		// 4. task a savepoint of the flink job
 		// 5. produce the part2 messages in power_data_2.txt
