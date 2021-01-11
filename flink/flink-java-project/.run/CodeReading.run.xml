@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CodeReading" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="org.apache.flink.quickstart.CodeReading" />
+    <module name="flink-java-project" />
+    <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.apache.flink.quickstart.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
