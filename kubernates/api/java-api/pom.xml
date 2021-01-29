@@ -8,7 +8,7 @@
 	<name>java-api</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-    <kubernetes.client.version>0.2</kubernetes.client.version>
+    <kubernetes.client.version>11.0.0</kubernetes.client.version>
     </properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/io.kubernetes/client-java-api -->
