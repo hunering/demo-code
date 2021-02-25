@@ -18,6 +18,7 @@ https://github.com/bitnami/bitnami-docker-kafka
 ps:
 
 ./flink run -c com.hxm.dcm.flink.power.PowerMsgCount ~/work/demo-code/flink/flink-java-project/target/flink-java-project-0.1.jar
+./flink run -c org.apache.flink.quickstart.SideOutputTest ~/work/demo-code/flink/flink-java-project/target/flink-java-project-0.1.jar
 ./flink list
 ./flink cancel 2906e9e87593daff30a66e14b11c9ef6
 ./flink run -s /home/huxiaomi/temp/savepoint/savepoint-cdc853-489b2b8e9d6e -c com.hxm.dcm.flink.power.PowerMsgCount ~/work/demo-code/flink/flink-java-project/target/flink-java-project-0.1.jar
