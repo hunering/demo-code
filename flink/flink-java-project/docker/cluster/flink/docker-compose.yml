@@ -1,0 +1,39 @@
+version: "2.2"
+services:
+  jobmanager:
+    image: flink:1.12.0-scala_2.12
+    ports:
+      - "8081:8081"
+      - "5005:5005"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+      #- FLINK_ENV_JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005
+
+  taskmanager1:
+    image: flink:1.12.0-scala_2.12
+    ports:
+      - "5006:5005"
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+      - FLINK_ENV_JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005
+  taskmanager2:
+    image: flink:1.12.0-scala_2.12
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
